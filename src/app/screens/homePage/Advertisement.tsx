@@ -1,0 +1,9 @@
+export default function Advertisement() {
+    return (
+    <div className="ads-restaurant-frame">
+        <video className="ads-video" autoPlay={true} loop={true} muted={true} playsInline={true} controls={true} data-video-media="">
+            <source type="video/mp4" src="video/woman.mp4" />
+        </video>
+    </div>
+    );
+}
