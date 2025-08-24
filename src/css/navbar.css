@@ -15,7 +15,8 @@
 .home-navbar .navbar-container .navbar-block {
     width: 100%;
     height: 100px;
-    background-color: #343434;
+    background: url("/public/img/otherNavbar.jpg");
+    background-size: 100% 100%;
     display: flex;
     position: fixed;
     z-index: 100;
@@ -162,15 +163,15 @@
 
 .other-navbar {
     width: 100%;
-    height: 500px;
+    height: 100px;
     display: flex;
     background: url("/public/img/otherNavbar.jpg");
     background-size: 100% 100%;
+    opacity: 0.8;
 }
 
 .other-navbar .navbar-container {
-    margin-top: 55px;
-    position: fixed;
+    margin-top: 20px;
 }
 
 .other-navbar .navbar-container .menu {

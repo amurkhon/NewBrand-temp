@@ -1,7 +1,5 @@
-
-
-
+import { Pagination } from "@mui/material";
 
 export default function OrdersPage() {
-    return (<div style={{width: "100%", background: "blue"}}>OrdersPage</div>);
+  return <Pagination count={10} variant="outlined" shape="rounded" />;
 }
