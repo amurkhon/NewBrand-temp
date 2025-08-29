@@ -1,0 +1,70 @@
+.orders-page {
+    width: 100%;
+    height: auto;
+}
+
+.orders-page .orders-container {
+    margin-top: 50px;
+    margin-bottom: 50px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.orders-page .orders-container .tab-box {
+    width: 68%;
+    height: 1000px;
+    border-radius: 2%;
+}
+
+.orders-page .orders-container .info-box {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    width: 28%;
+    height: 1000px;
+}
+
+/* Paused orders */
+.orderitem-box {
+    width: 100%;
+    padding: 5px;
+}
+
+.orderitem-box .orderitem-info {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.orderitem-box .orderitem-footer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.orderitem-box .orderitem-footer .total-price {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.orderitem-box .orderitem-footer .buttons {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.orders-page .orders-container .info-box .user-box{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+}
