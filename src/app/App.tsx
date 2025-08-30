@@ -10,6 +10,7 @@ import HomePage from "./screens/homePage";
 import Footer from "./components/footer";
 import "../css/footer.css";
 import "../css/navbar.css";
+import AuthenticationModal from "./components/auth";
 
 function App() {
   const location = useLocation();
@@ -34,6 +35,7 @@ function App() {
         </Route>
       </Switch>
       <Footer />
+      <AuthenticationModal />
     </>
   );
 }
