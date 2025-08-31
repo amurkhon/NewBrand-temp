@@ -13,6 +13,8 @@ import { Product } from "../../../lib/types/product";
 import { useCallback, useEffect, useState } from "react";
 import ProductService from "../../services/ProductService";
 import { ProductCollection } from "../../../lib/enums/product.enum";
+import MemberService from "../../services/MemberService";
+import { Member } from "../../../lib/types/member";
 
 
 /* Redux Slice*/
@@ -20,7 +22,7 @@ import { ProductCollection } from "../../../lib/enums/product.enum";
 const actionDispatch = (dispatch: Dispatch) =>({
     setPopularProducts: (data: Product[]) => dispatch(setPopularProducts(data)),
     setNewProducts: (data: Product[]) => dispatch(setNewProducts(data)),
-    setTopUsers: (data: Product[]) => dispatch(setTopUsers(data)),
+    setTopUsers: (data: Member[]) => dispatch(setTopUsers(data)),
 });
 
 export default function HomePage() {
@@ -29,6 +31,7 @@ export default function HomePage() {
     useEffect(() => {
         // Backend server data fetching => Data
         const product = new ProductService();
+        const member = new MemberService();
 
         product
             .getProducts({
@@ -37,6 +40,18 @@ export default function HomePage() {
                 order: "productViews",
             })
             .then((data) => setPopularProducts(data))
+            .catch((err) => console.log(err));
+        product
+            .getProducts({
+                page:1,
+                limit:4,
+                order: "createdAt",
+            })
+            .then((data) => setNewProducts(data))
+            .catch((err) => console.log(err));
+        member
+            .getTopUsers()
+            .then((data) => setTopUsers(data))
             .catch((err) => console.log(err));
     }, []);
 

@@ -8,15 +8,26 @@ import Divider from "../../components/divider"
 import Typography from '@mui/joy/Typography';
 import VisiblityIcon from "@mui/icons-material/Visibility"
 import LocationOnRoundedIcon from '@mui/icons-material/LocationOnRounded';
+import { createSelector } from "reselect";
+import { retrieveNewProducts } from "./selector";
+import { useSelector } from "react-redux";
+import { Product } from "../../../lib/types/product";
+import { serverApi } from "../../../lib/config";
+import { useEffect, useState } from "react";
 
 
 
 /** REDUX SELECTOR **/ 
-const newclothes = [1,2,3,4]
+const newProductsRetriever = createSelector(retrieveNewProducts,
+    (newProducts) => ({newProducts})
+);
 
 export default function NewDishes() {
-    const newClothes = [1,2,3,4]
-
+    const { newProducts } = useSelector(newProductsRetriever);
+    const [hover, setHover] = useState<boolean>(false);
+    useEffect(() => {
+        console.log(1);
+    },[hover])
     return (
         <div className="new-dishes-frame">
             <Container>
@@ -24,13 +35,15 @@ export default function NewDishes() {
                     <Box className="category-title">New Fashions</Box>
                     <Stack className="cards-frame">
                         <CssVarsProvider>
-                            { newClothes.length !== 0 ? (
-                            newClothes.map((num: number, index) => {
+                            { newProducts.length !== 0 ? (
+                            newProducts.map((product: Product) => {
+                                const imagePath = `${serverApi}/${product?.productImages[0]}`;
+                                const imagePath1 = `${serverApi}/${product?.productImages[1]}`;
                                 return (
-                                    <Card className={"card"} sx={{ minHeight: '280px', width: 320 }}>
+                                    <Card key={product?._id} onMouseEnter={(e) => {setHover(!hover)}} className={"card"} sx={{ minHeight: '280px', width: 320, }}>
                                         <CardCover>
                                             <img
-                                            src="/img/dressWhite.jpg"
+                                            src={hover === false ? imagePath : imagePath1}
                                             loading="lazy"
                                             alt=""
                                             />
@@ -43,13 +56,12 @@ export default function NewDishes() {
                                         />
                                         <CardContent sx={{ justifyContent: 'flex-end' }}>
                                             <Typography level="title-lg" textColor="#fff">
-                                            Yosemite National Park
+                                                {product?.productName}
                                             </Typography>
                                             <Typography
-                                            startDecorator={<LocationOnRoundedIcon />}
-                                            textColor="neutral.300"
+                                                textColor="neutral.300"
                                             >
-                                            California, USA
+                                                Only {product?.productLeftCount} left!
                                             </Typography>
                                         </CardContent>
                                     </Card>

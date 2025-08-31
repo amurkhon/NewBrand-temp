@@ -27,11 +27,11 @@ export default function PopularClothes() {
                 <Box className="category-title">Popular Clothes</Box>
                 <Stack className="cards-frame">
                     { popularProducts?.length !== 0 ? (
-                    popularProducts?.map(function (product: Product){
+                    popularProducts?.map(function (product: Product, index){
                         const imagePath = `${serverApi}/${product?.productImages[0]}`
                         return (
                             <CssVarsProvider key={product?._id}>
-                                <Card className={classname}>
+                                <Card className={`card${index}`}>
                                     <CardCover>
                                         <img  src={imagePath} alt=""/>
                                     </CardCover>
@@ -41,13 +41,13 @@ export default function PopularClothes() {
                                             flexDirection={"row"}
                                             justifyContent={"space-between"}
                                         >
-                                            <Typography level="h2" fontSize="lg" mb="1" textColor="#fff">
+                                            <Typography level="h2" fontSize="lg" mb="1" textColor="#331f1fff">
                                                 {product?.productName}
                                             </Typography>
                                             <Typography
                                                 sx={{
                                                     fontWeight: "md",
-                                                    color: "neutral.300",
+                                                    color: "neutral.600",
                                                     alignItems: "center",
                                                     display: "flex"
                                                 }}                                            
@@ -69,7 +69,7 @@ export default function PopularClothes() {
                                     >
                                         <Typography
                                             startDecorator={<DescriptionOutlined />}
-                                            textColor={"neutral.300"}
+                                            textColor={"neutral.600"}
                                         >
                                             {product?.productDesc}
                                         </Typography>

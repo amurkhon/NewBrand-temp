@@ -122,7 +122,7 @@
     height: auto;
     bottom: 5px;
     background: #f8f8ff;
-    opacity: 0.4;
+    opacity: 0.7;
     box-shadow: 0px 40px 30px rgba(25, 25, 46, 0.04);
     border-radius: 8px;
   }
@@ -260,8 +260,14 @@
     justify-content: space-around;
 }
 
-.homepage .popular-dishes-frame .popular-section .cards-frame .card1{
+.homepage .popular-dishes-frame .popular-section .cards-frame .card0{
     width: 41%;
+    height: 330px;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+.homepage .popular-dishes-frame .popular-section .cards-frame .card1{
+    width: 56%;
     height: 330px;
     cursor: pointer;
     margin-bottom: 10px;
@@ -270,26 +276,20 @@
     width: 56%;
     height: 330px;
     cursor: pointer;
-    margin-bottom: 10px;
 }
 .homepage .popular-dishes-frame .popular-section .cards-frame .card3{
-    width: 56%;
-    height: 330px;
-    cursor: pointer;
-}
-.homepage .popular-dishes-frame .popular-section .cards-frame .card4{
     width: 41%;
     height: 330px;
     cursor: pointer;
 }
 
-.homepage .popular-dishes-frame .popular-section .cards-frame .card .card-cover{
+.homepage .popular-dishes-frame .popular-section .cards-frame .card-cover{
     background: linear-gradient(
         to top,
         rgba(0,0,0,0.4),
         rgba(0,0,0,0) 200px
     ),
-    linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0) 300px);
+    linear-gradient(to top, rgba(0,0,0,0.5), rgba(0,0,0,0) 300px);
 }
 
 /* New Clothes */
@@ -486,7 +486,7 @@
 }
 
 .homepage .active-users-frame .active-users .cards-frame .card {
-    width: 320px;
+    width: 420px;
     height: auto;
     cursor: pointer;
     border: 0px;
