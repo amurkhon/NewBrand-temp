@@ -1,9 +1,9 @@
-import { DownsideSize, Gender, ProductCollelction, ProductColor, ProductMaterial, ProductStatus, ShoesSize, UpsideSize } from "../enums/product.enum";
+import { DownsideSize, Gender, ProductCollection, ProductColor, ProductMaterial, ProductStatus, ShoesSize, UpsideSize } from "../enums/product.enum";
 
 export interface Product {
-    _id: String,
+    _id: string,
     productStatus: ProductStatus,
-    productCollection: ProductCollelction,
+    productCollection: ProductCollection,
     productName: string,
     productPrice: number,
     productLeftCount: number,
@@ -22,6 +22,6 @@ export interface ProductInquiry {
     order: string;
     page: number;
     limit: number;
-    productCollection?: ProductCollelction;
+    productCollection?: ProductCollection;
     search?: string;
 }

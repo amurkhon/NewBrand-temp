@@ -4,7 +4,7 @@ export enum ProductStatus {
     DELETE = 'DELETE',
 }
 
-export enum ProductCollelction {
+export enum ProductCollection {
     CAP = 'CAP',
     TSHIRT = 'T-SHIRT',
     SHIRT = 'SHIRT',

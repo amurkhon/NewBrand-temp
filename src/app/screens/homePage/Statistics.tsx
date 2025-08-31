@@ -1,5 +1,4 @@
-import { Box, Container, Stack } from "@mui/material";
-import Divider from "../../components/divider"
+import { Box, Button, Container, Stack } from "@mui/material";
 
 export default function Statistics() {
     return <div className={"static-frame"}>

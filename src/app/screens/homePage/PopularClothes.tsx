@@ -8,25 +8,32 @@ import Typography from '@mui/joy/Typography';
 import VisiblityIcon from "@mui/icons-material/Visibility"
 import CardOverflow from '@mui/joy/CardOverflow';
 import { DescriptionOutlined } from "@mui/icons-material";
+import { createSelector } from "reselect";
+import { retrievePopularProducts } from "./selector";
+import { useSelector } from "react-redux";
+import { Product } from "../../../lib/types/product";
+import { serverApi } from "../../../lib/config";
 
 /** REDUX SELECTOR **/ 
-
+const popularProductsRetriever = createSelector(retrievePopularProducts,
+    (popularProducts) => ({popularProducts})
+);
 export default function PopularClothes() {
-    const popularDishes = [1,2,3,4];
+    const {popularProducts} = useSelector(popularProductsRetriever);
     let classname ='';
     return <div className="popular-dishes-frame">
         <Container>
             <Stack className="popular-section">
                 <Box className="category-title">Popular Clothes</Box>
                 <Stack className="cards-frame">
-                    { popularDishes.length !== 0 ? (
-                    popularDishes.map(function (num: number, index){
-                        num === index + 1  ? classname = `card${num}`: classname = 'card';
+                    { popularProducts?.length !== 0 ? (
+                    popularProducts?.map(function (product: Product){
+                        const imagePath = `${serverApi}/${product?.productImages[0]}`
                         return (
-                            <CssVarsProvider key={num}>
+                            <CssVarsProvider key={product?._id}>
                                 <Card className={classname}>
                                     <CardCover>
-                                        <img  src={"img/rose.webp"} alt=""/>
+                                        <img  src={imagePath} alt=""/>
                                     </CardCover>
                                     <CardCover className={"card-cover"} />
                                     <CardContent sx={{ justifyContent: 'flex-end' }}>
@@ -35,7 +42,7 @@ export default function PopularClothes() {
                                             justifyContent={"space-between"}
                                         >
                                             <Typography level="h2" fontSize="lg" mb="1" textColor="#fff">
-                                                New Clothe
+                                                {product?.productName}
                                             </Typography>
                                             <Typography
                                                 sx={{
@@ -45,7 +52,7 @@ export default function PopularClothes() {
                                                     display: "flex"
                                                 }}                                            
                                             >
-                                                2
+                                                {product?.productViews}
                                                 <VisiblityIcon sx={{fontSize: 25, marginLeft: "5px"}} />
                                             </Typography>
                                         </Stack>
@@ -64,7 +71,7 @@ export default function PopularClothes() {
                                             startDecorator={<DescriptionOutlined />}
                                             textColor={"neutral.300"}
                                         >
-                                            Beautiful
+                                            {product?.productDesc}
                                         </Typography>
                                     </CardOverflow>
                                 </Card>
