@@ -20,7 +20,6 @@ const popularProductsRetriever = createSelector(retrievePopularProducts,
 );
 export default function PopularClothes() {
     const {popularProducts} = useSelector(popularProductsRetriever);
-    let classname ='';
     return <div className="popular-dishes-frame">
         <Container>
             <Stack className="popular-section">
