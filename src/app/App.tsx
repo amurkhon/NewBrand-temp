@@ -11,15 +11,32 @@ import Footer from "./components/footer";
 import "../css/footer.css";
 import "../css/navbar.css";
 import AuthenticationModal from "./components/auth";
+import useBasket from "./hooks/useBasket";
 
 function App() {
   const location = useLocation();
+  const { cartItems, onAdd, onRemove, onDelete, onDeleteAll } = useBasket();
   return (
     <>
-      { location.pathname === "/" ? <HomeNavbar /> : <OtherNavbar />}
+      { location.pathname === "/" 
+        ? <HomeNavbar
+            cartItems={cartItems}
+            onAdd={onAdd}
+            onRemove={onRemove}
+            onDelete = {onDelete}
+            onDeleteAll = {onDeleteAll}
+          /> 
+        : <OtherNavbar
+            cartItems={cartItems}
+            onAdd={onAdd}
+            onRemove={onRemove}
+            onDelete = {onDelete}
+            onDeleteAll = {onDeleteAll}
+          />
+      }
       <Switch>
         <Route path={"/products"} >
-          <ProductPage />
+          <ProductPage onAdd = {onAdd} />
         </Route>
         <Route path={"/orders"} >
           <OrdersPage />

@@ -46,7 +46,8 @@ interface ChosenProductProps {
     onAdd: (item: CartItem) => void;
 };
 
-export default function ChosenProduct() {
+export default function ChosenProduct(props: ChosenProductProps) {
+    const { onAdd } = props;
     const { productId } = useParams<id>();
     const { setChosenProduct, setMall } = actionDispatch(useDispatch());
     const { product } = useSelector(chosenProductRetriever);
@@ -167,7 +168,20 @@ export default function ChosenProduct() {
                                         <span>{product?.productPrice ? product?.productPrice : 'No description!'} $</span>
                                     </div>
                                     <Box sx={{ height: "100%",display: 'flex',flexDirection: "row",alignItems: "flex-end", gap: 1.5, '& > button': { flex: 1 } }}>
-                                        <Button variant="outlined" color="neutral">
+                                        <Button 
+                                            variant="outlined" 
+                                            color="neutral"
+                                            onClick={(e) => {
+                                                onAdd({
+                                                    _id: product._id,
+                                                    quantity: 1,
+                                                    name: product.productName,
+                                                    price: product.productPrice,
+                                                    image: product.productImages[0],
+                                                })
+                                                e.stopPropagation();
+                                            }}
+                                        >
                                             Add to Card
                                         </Button>
                                     </Box>

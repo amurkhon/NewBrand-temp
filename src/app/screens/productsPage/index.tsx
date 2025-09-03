@@ -17,16 +17,17 @@ interface ProductsPageProps {
 
 /* Redux Slice */
 
-export default function ProductsPage() {
+export default function ProductsPage(props: ProductsPageProps) {
+    const { onAdd } = props;
     const products = useRouteMatch();
     return (
         <div className={"products-page"}>
             <Switch>
                 <Route path={`${products.path}/:productId`}>
-                    <ChosenProduct />
+                    <ChosenProduct onAdd={onAdd} />
                 </Route>
                 <Route path={`${products.path}`}>
-                    <Products />
+                    <Products onAdd={onAdd} />
                 </Route>
             </Switch>
         </div>

@@ -18,8 +18,17 @@ interface BasketProps {
   onDeleteAll: () => void;
 };
 
-export default function Basket() {
+export default function Basket(props: BasketProps) {
+  const {cartItems, onAdd, onRemove, onDelete, onDeleteAll} = props;
   const history = useHistory();
+
+  const itemsPrice: number = cartItems.reduce(
+    (a: number, c: CartItem) => a + c.quantity * c.price,
+    0
+  );
+
+  const shippingCost: number = itemsPrice < 100 ? 5 : 0;
+  const totalPrice = (itemsPrice + shippingCost).toFixed(1);
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -31,8 +40,6 @@ export default function Basket() {
   const handleClose = () => {
     setAnchorEl(null);
   };
-
-  const cartItems = [1,2,3,4];
   
 
   return (
@@ -92,23 +99,46 @@ export default function Basket() {
 
           <Box className={"orders-main-wrapper"}>
             <Box className={"orders-wrapper"}>
-              {cartItems.map((item: number, index) => {
+              {cartItems.map((item: CartItem) => {
+                const imagePath = `${serverApi}/${item.image}`;
                 return(
-                  <Box className={"basket-info-box"} key={index}>
+                  <Box className={"basket-info-box"} key={item?._id}>
                     <div className={"cancel-btn"} onClick={(e) => {
+                      onDelete({
+                        _id: item._id,
+                        quantity: item.quantity,
+                        name: item.name,
+                        price: item.price,
+                        image: item.image
+                      })
                     }}>
                       <CancelIcon color={"primary"} />
                     </div>
-                    <img src={"/img/event1.jpg"} className={"product-img"} />
-                    <span className={"product-name"}>Sweater</span>
-                    <p className={"product-price"}>100 x 2</p>
+                    <img src={imagePath} className={"product-img"} />
+                    <span className={"product-name"}>{item?.name}</span>
+                    <p className={"product-price"}>{item?.price} x {item?.quantity}</p>
                     <Box sx={{ minWidth: 120 }}>
                       <div className="col-2">
                         <button className="remove" onClick={(e) => {
+                          onRemove({
+                            _id: item._id,
+                            quantity: item.quantity,
+                            name: item.name,
+                            price: item.price,
+                            image: item.image
+                          })
                         }}>-</button>{" "}
                         <button 
                           className="add"
-                          onClick={(e) => {}}
+                          onClick={(e) => {
+                            onAdd({
+                              _id: item._id,
+                              quantity: 1,
+                              name: item.name,
+                              price: item.price,
+                              image: item.image,
+                          })
+                          }}
                         >+</button>
                       </div>
                     </Box>
