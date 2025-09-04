@@ -6,6 +6,13 @@ import Textarea from '@mui/joy/Textarea';
 import "../../../css/auth.css";
 import { Label } from '@mui/icons-material';
 import { TextareaAutosize } from '@mui/base/TextareaAutosize';
+import { useState } from 'react';
+import { useGlobals } from '../../hooks/useGlobals';
+import { T } from '../../../lib/types/common';
+import { Messages } from '../../../lib/config';
+import { LoginInput, MemberInput } from '../../../lib/types/member';
+import MemberService from '../../services/MemberService';
+import { sweetErrorHandling } from '../../../lib/sweetAlert';
 
 
 const StyledTextarea = styled(TextareaAutosize)({
@@ -90,8 +97,92 @@ const InnerTextareaPassword = React.forwardRef<
   );
 });
 
-export default function AuthenticationModal() {
-    const [open, setOpen] = React.useState<boolean>(false);
+interface AuthenticationModalProps {
+  signupOpen: boolean;
+  loginOpen: boolean;
+  handleSignupClose: () => void;
+  handleLoginClose: () => void;
+}
+
+export default function AuthenticationModal(props: AuthenticationModalProps) {
+
+    const { signupOpen, loginOpen, handleSignupClose, handleLoginClose } = props;
+    const [memberNick, setMemberNick] = useState<string>("");
+    const [memberPhone, setMemberPhone] = useState<string>("");
+    const [memberPassword, setMemberPassword] = useState<string>("");
+    const { setAuthMember } = useGlobals();
+
+    /* HANDLERS */
+
+    const handleUsername = (e: T) => {
+      setMemberNick(e.target.value);
+    };
+
+    const handlePhone = (e: T) => {
+      setMemberPhone(e.target.value);
+    };
+
+    const handlePassword = (e: T) => {
+      setMemberPassword(e.target.value);
+    };
+
+    const handlePasswordKeyDown = (e: T) => {
+      if(e.key === "Enter" && signupOpen) {
+        handleSignupRequest().then();
+      } else if(e.key === "Enter" && loginOpen) {
+        handleLoginRequest().then();
+      }
+    };
+
+    const handleSignupRequest = async () => {
+      try {
+        const isFulfill =
+          memberNick !== '' && memberPhone !== '' && memberPassword !== '';
+        if(!isFulfill) throw new Error(Messages.error3);
+
+        const signupInput: MemberInput = {
+          memberNick: memberNick,
+          memberPassword: memberPassword,
+          memberPhone: memberPhone
+        };
+
+        const member = new MemberService();
+        const result = await member.signup(signupInput);
+
+
+        setAuthMember(result);
+        handleSignupClose();
+
+      } catch (err) {
+        console.log(err);
+        handleSignupClose();
+        sweetErrorHandling(err).then();
+      }
+    };
+
+    const handleLoginRequest = async () => {
+      try {
+        const isFulfill =
+          memberNick !== '' && memberPassword !== '';
+        if(!isFulfill) throw new Error(Messages.error3);
+
+        const loginInput: LoginInput = {
+          memberNick: memberNick,
+          memberPassword: memberPassword,
+        };
+
+        const member = new MemberService();
+        const result = await member.login(loginInput);
+
+        setAuthMember(result);
+        handleLoginClose();
+
+      } catch (err) {
+        console.log(err);
+        handleLoginClose();
+        sweetErrorHandling(err).then();
+      }
+    };
     return (
         <div>
             <CssVarsProvider>
@@ -99,8 +190,8 @@ export default function AuthenticationModal() {
                     <Modal
                         aria-labelledby="modal-title"
                         aria-describedby="modal-desc"
-                        open={false}
-                        onClose={() => setOpen(false)}
+                        open={signupOpen}
+                        onClose={handleSignupClose}
                         sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
                     >
                         <Stack className={"form-box"}>
@@ -115,17 +206,21 @@ export default function AuthenticationModal() {
                                         <Textarea
                                             slots={{ textarea: InnerTextareaUsername }}
                                             className={"text-area"}
+                                            onChange={handleUsername}
                                         />
                                         <Textarea
                                             slots={{ textarea: InnerTextareaPhoneNumber }}
                                             className={"text-area"}
+                                            onChange={handlePhone}
                                         />
                                         <Input
                                             type="password"
                                             slots={{ input: InnerTextareaPassword }}
                                             className={"text-area"}
+                                            onChange={handlePassword}
+                                            onKeyDown={handlePasswordKeyDown}
                                         />
-                                        <Button type="submit">Sine-up</Button>
+                                        <Button type="submit" onClick={handleSignupRequest}>Sine-up</Button>
                                     </form>
                                 </Box>
                             </Stack>
@@ -136,8 +231,8 @@ export default function AuthenticationModal() {
                     <Modal
                         aria-labelledby="modal-title"
                         aria-describedby="modal-desc"
-                        open={open}
-                        onClose={() => setOpen(false)}
+                        open={loginOpen}
+                        onClose={handleLoginClose}
                         sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
                     >
                         <Stack className={"form-box"}>
@@ -152,13 +247,15 @@ export default function AuthenticationModal() {
                                         <Textarea
                                             slots={{ textarea: InnerTextareaUsername }}
                                             className={"text-area"}
+                                            onChange={handleUsername}
                                         />
                                         <Input
                                             type="password"
                                             slots={{ input: InnerTextareaPassword }}
                                             className={"text-area"}
+                                            onChange={handlePassword}
                                         />
-                                        <Button type="submit">Login</Button>
+                                        <Button type="submit" onClick={handleLoginRequest}>Login</Button>
                                     </form>
                                 </Box>
                             </Stack>
