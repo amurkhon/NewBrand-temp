@@ -28,9 +28,59 @@ import { CssVarsProvider } from "@mui/joy";
 import PausedOrders from "./PausedOrders";
 import ProcessOrders from "./ProcessOrder";
 import FinishedOrders from "./FinishedOrders";
+import { Dispatch } from "@reduxjs/toolkit";
+import { Order, OrderInquiry } from "../../../lib/types/order";
+import { setFinishedOrders, setPausedOrders, setProcessOrders } from "./slice";
+import { useHistory } from "react-router-dom";
+import { useGlobals } from "../../hooks/useGlobals";
+import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { OrderStatus } from "../../../lib/enums/order.enum";
+import OrderService from "../../services/OrderService";
+import { serverApi } from "../../../lib/config";
+
+/** REDUX SLICE **/ 
+const actionDispatch = (dispatch: Dispatch) => ({
+    setPausedOrders: (data: Order[]) => dispatch(setPausedOrders(data)),
+    setProcessOrders: (data: Order[]) => dispatch(setProcessOrders(data)),
+    setFinishedOrders: (data: Order[]) => dispatch(setFinishedOrders(data)),
+});
 
 export default function OrdersPage() {
-     const [value, setValue] = React.useState('1');
+    const history = useHistory();
+    const {authMember, orderBuilder} = useGlobals();
+
+    if(!authMember) history.push("/");
+    const { setPausedOrders, setProcessOrders, setFinishedOrders } = actionDispatch(useDispatch());
+    
+    const [value, setValue] = useState('1');
+    const [orderInquiry, setOrderInquiry] = useState<OrderInquiry>({
+        page: 1,
+        limit: 5,
+        orderStatus: OrderStatus.PAUSE,
+    });
+
+    useEffect(() => {
+        const order = new OrderService();
+        order.getMyOrders({...orderInquiry, orderStatus: OrderStatus.PAUSE})
+            .then((data) => {
+                setPausedOrders(data);
+            })
+            .catch((err) => console.log(err));
+
+        order.getMyOrders({...orderInquiry, orderStatus: OrderStatus.PROCESS})
+        .then((data) => {
+            setProcessOrders(data);
+        })
+        .catch((err) => console.log(err));
+
+        order.getMyOrders({...orderInquiry, orderStatus: OrderStatus.FINISH})
+        .then((data) => {
+            setFinishedOrders(data);
+        })
+        .catch((err) => console.log(err));
+
+    },[orderInquiry, orderBuilder]);
 
     const handleChange = (event: React.SyntheticEvent, newValue: string) => {
         setValue(newValue);
@@ -50,7 +100,7 @@ export default function OrdersPage() {
                         </Box>
                         <PausedOrders setValue={setValue} />
                         <ProcessOrders setValue={setValue} />
-                        <FinishedOrders setValue={setValue} />
+                        <FinishedOrders />
                     </TabContext>
                 </Box> 
             </Stack>
@@ -59,7 +109,7 @@ export default function OrdersPage() {
                     <Stack className={"user-box"}>
                         <Card className={"user-card"} sx={{ width: "100%", boxShadow: 'lg' }}>
                             <CardContent sx={{ alignItems: 'center', textAlign: 'center' }}>
-                                <Avatar src="/static/images/avatar/1.jpg" sx={{ '--Avatar-size': '4rem' }} />
+                                <Avatar src={authMember?.memberImage ? `${serverApi}/${authMember.memberImage}` : "/static/images/avatar/1.jpg"} sx={{ '--Avatar-size': '4rem' }} />
                                 <Chip
                                 size="sm"
                                 variant="soft"
@@ -73,10 +123,10 @@ export default function OrdersPage() {
                                 >
                                 PRO
                                 </Chip>
-                                <Typography level="title-lg">Josephine Blanton</Typography>
+                                <Typography level="title-lg">{authMember?.memberNick}</Typography>
+                                <Typography level="title-md">{authMember?.memberType}</Typography>
                                 <Typography level="body-sm" sx={{ maxWidth: '24ch' }}>
-                                Hello, this is my bio and I am a PRO member of MUI. I am a developer and I
-                                love to code.
+                                    {authMember?.memberDesc}
                                 </Typography>
                                 <Box
                                 sx={{

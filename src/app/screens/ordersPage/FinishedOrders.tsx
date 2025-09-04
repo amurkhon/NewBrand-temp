@@ -8,76 +8,60 @@ import ListItemDecorator from '@mui/joy/ListItemDecorator';
 import Typography from '@mui/joy/Typography';
 import { Button, CssVarsProvider, Stack } from "@mui/joy";
 import "../../../css/orders.css"
+import { createSelector } from "@reduxjs/toolkit";
+import { retrieveFinishedOrdersPage } from "./selector";
+import { useSelector } from "react-redux";
+import { Order, OrderItem } from "../../../lib/types/order";
+import { Product } from "../../../lib/types/product";
+import { serverApi } from "../../../lib/config";
 
-interface PausedOrders{
-    setValue: (input: string) => void;
-};
+const finishedOrdersRetriver = createSelector(
+    retrieveFinishedOrdersPage,
+    (finishedOrders) => ({finishedOrders})
+);
 
-export default function FinishedOrders(props: PausedOrders) {
-    const {setValue} = props;
+export default function FinishedOrders() {
+    const { finishedOrders } = useSelector(finishedOrdersRetriver);
     /* HANDLERS */
     return (
         <TabPanel value={"3"}>
             <CssVarsProvider>
             <Box className={"orderitem-box"}>
-                <List
-                    aria-labelledby="ellipsis-list-demo"
-                    sx={{ '--ListItemDecorator-size': '56px',marginBottom: "10px",padding: "5px",backgroundColor: "#feffffff", }}
-                >
-                    <ListItem>
-                        <ListItemDecorator>
-                            <Avatar src="/static/images/avatar/1.jpg" />
-                        </ListItemDecorator>
-                        <ListItemContent>
-                            <Typography level="title-sm">Name</Typography>
-                            <Stack className={"orderitem-info"}>
-                                <Typography level="title-sm">Price: 8$</Typography>
-                                <Typography marginLeft={2} level="title-sm">Count: 2</Typography>
+                {finishedOrders?.map((order: Order) => {
+                    return (
+                        <List
+                            aria-labelledby="ellipsis-list-demo"
+                            sx={{ '--ListItemDecorator-size': '56px',marginBottom: "10px",padding: "5px",backgroundColor: "#feffffff", }}
+                        >
+                            {order?.orderItems?.map((orderItem: OrderItem) => {
+                                const product: Product = order?.productData?.filter(
+                                    (ele: Product) => orderItem?.productId === ele?._id
+                                )[0];
+                                const imagePath = `${serverApi}/${product?.productImages[0]}`;
+                                return (
+                                    <ListItem>
+                                        <ListItemDecorator>
+                                            <Avatar src={imagePath} />
+                                        </ListItemDecorator>
+                                        <ListItemContent>
+                                            <Typography level="title-sm">{product?.productName}</Typography>
+                                            <Stack className={"orderitem-info"}>
+                                                <Typography level="title-sm">Price: {product?.productPrice}$</Typography>
+                                                <Typography marginLeft={2} level="title-sm">Count: {orderItem?.itemQuantity}</Typography>
+                                            </Stack>
+                                        </ListItemContent>
+                                    </ListItem>
+                                );
+                            })}
+                            <Stack className={"orderitem-footer"}>
+                                <Stack className={"total-price"}>
+                                    <Typography marginLeft={2} level="title-sm">Delivery cost: {order?.orderDelivery}$</Typography>
+                                    <Typography marginLeft={2} level="title-sm"> Total: {order?.orderTotal}$</Typography>
+                                </Stack>
                             </Stack>
-                        </ListItemContent>
-                    </ListItem>
-                    <ListItem>
-                        <ListItemDecorator>
-                            <Avatar src="/static/images/avatar/1.jpg" />
-                        </ListItemDecorator>
-                        <ListItemContent>
-                            <Typography level="title-sm">Name</Typography>
-                            <Stack className={"orderitem-info"}>
-                                <Typography level="title-sm">Price: 8$</Typography>
-                                <Typography marginLeft={2} level="title-sm">Count: 2</Typography>
-                            </Stack>
-                        </ListItemContent>
-                    </ListItem>
-                    <Stack className={"orderitem-footer"}>
-                        <Stack className={"total-price"}>
-                            <Typography marginLeft={2} level="title-sm">Delivery cost: 5$</Typography>
-                            <Typography marginLeft={2} level="title-sm"> Total: 21$</Typography>
-                        </Stack>
-                    </Stack>
-                </List>
-                <List
-                    aria-labelledby="ellipsis-list-demo"
-                    sx={{ '--ListItemDecorator-size': '56px',marginBottom: "10px",boxShadow: "lg",padding: "5px",backgroundColor: "#feffffff", }}
-                >
-                    <ListItem>
-                        <ListItemDecorator>
-                            <Avatar src="/static/images/avatar/1.jpg" />
-                        </ListItemDecorator>
-                        <ListItemContent>
-                            <Typography level="title-sm">Name</Typography>
-                            <Stack className={"orderitem-info"}>
-                                <Typography level="title-sm">Price: 8$</Typography>
-                                <Typography marginLeft={2} level="title-sm">Count: 2</Typography>
-                            </Stack>
-                        </ListItemContent>
-                    </ListItem>
-                    <Stack className={"orderitem-footer"}>
-                        <Stack className={"total-price"}>
-                            <Typography marginLeft={2} level="title-sm">Delivery cost: 5$</Typography>
-                            <Typography marginLeft={2} level="title-sm"> Total: 21$</Typography>
-                        </Stack>
-                    </Stack>
-                </List>
+                        </List>
+                    );
+                })}
             </Box>
             </CssVarsProvider>
         </TabPanel>

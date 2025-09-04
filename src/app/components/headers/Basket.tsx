@@ -9,6 +9,8 @@ import { useHistory } from "react-router-dom";
 import { CartItem } from "../../../lib/types/search";
 import { Messages, serverApi } from "../../../lib/config";
 import { sweetErrorHandling, sweetTopSuccessAlert } from "../../../lib/sweetAlert";
+import { useGlobals } from "../../hooks/useGlobals";
+import OrderSrevice from "../../services/OrderService";
 
 interface BasketProps {
   cartItems: CartItem[];
@@ -21,13 +23,14 @@ interface BasketProps {
 export default function Basket(props: BasketProps) {
   const {cartItems, onAdd, onRemove, onDelete, onDeleteAll} = props;
   const history = useHistory();
+  const { authMember, setOrderBuilder } = useGlobals();
 
   const itemsPrice: number = cartItems.reduce(
     (a: number, c: CartItem) => a + c.quantity * c.price,
     0
   );
 
-  const shippingCost: number = itemsPrice < 100 ? 5 : 0;
+  const shippingCost: number = itemsPrice < 300 ? 15 : 0;
   const totalPrice = (itemsPrice + shippingCost).toFixed(1);
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -39,6 +42,24 @@ export default function Basket(props: BasketProps) {
   };
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const proceedOrderHandler = async () => {
+    try {
+      handleClose();
+      if(!authMember) throw new Error(Messages.error2);
+
+      const order = new OrderSrevice();
+      await order.createOrder(cartItems);
+
+      onDeleteAll();
+
+      setOrderBuilder(new Date());
+      history.push("/orders");
+    } catch (err) {
+      console.log(err);
+      sweetErrorHandling(err).then();
+    }
   };
   
 
@@ -94,7 +115,7 @@ export default function Basket(props: BasketProps) {
         <Stack className={"basket-frame"}>
           <Box className={"all-check-box"}>
             {cartItems.length == 0 ? (<div>Cart is empty!</div>) 
-              : (<div>Cart Products! <Button color="primary" variant="contained">Delete All!</Button></div>)}
+              : (<div>Cart Products! <Button color="primary" onClick={onDeleteAll} variant="contained">Delete All!</Button></div>)}
           </Box>
 
           <Box className={"orders-main-wrapper"}>
@@ -150,9 +171,9 @@ export default function Basket(props: BasketProps) {
           {cartItems.length !== 0 
             ? (
                 <Box className={"basket-order"}>
-                  <span className={"price"}>Total: $200 (100+ 100)
+                  <span className={"price"}>Total: ${totalPrice}  ({itemsPrice}+{shippingCost})
                   </span>
-                  <Button startIcon={<ShoppingCartIcon />} variant={"contained"}>
+                  <Button startIcon={<ShoppingCartIcon />} onClick={proceedOrderHandler} variant={"contained"}>
                     Order
                   </Button>
                 </Box>
@@ -162,3 +183,7 @@ export default function Basket(props: BasketProps) {
     </Box>
   );
 }
+function setOrderBuilder(arg0: Date) {
+  throw new Error("Function not implemented.");
+}
+
