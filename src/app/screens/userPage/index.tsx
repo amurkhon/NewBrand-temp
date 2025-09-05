@@ -8,9 +8,13 @@ import { serverApi } from "../../../lib/config";
 import { useHistory } from "react-router-dom";
 import { MemberType } from "../../../lib/enums/member.enum";
 import { Settings } from "./Settings";
+import { useGlobals } from "../../hooks/useGlobals";
 
 export default function UserPage() {
   const history = useHistory();
+  const { authMember } = useGlobals();
+
+  if(!authMember) history.push("/");
 
   return (
     <div className={"user-page"}>
@@ -34,17 +38,17 @@ export default function UserPage() {
               >
                 <div className={"order-user-img"}>
                   <img
-                    src={"/icons/default-user.svg"}
+                    src={authMember?.memberImage ? `${serverApi}/${authMember?.memberImage}` : "/icons/default-user.svg"}
                     className={"order-user-avatar"}
                   />
                   <div className={"order-user-icon-box"}>
                     <img src={"/icons/user-badge.svg"} />
                   </div>
                 </div>
-                <span className={"order-user-name"}>Name</span>
-                <span className={"order-user-prof"}>MemberType</span>
+                <span className={"order-user-name"}>{authMember?.memberNick}</span>
+                <span className={"order-user-prof"}>{authMember?.memberType}</span>
                 <span className={"order-user-prof"}>
-                  { "No address"}
+                  {authMember?.memberAddress ? authMember.memberAddress : "No address"}
                 </span>
               </Box>
               <Box className={"user-media-box"}>
@@ -53,7 +57,7 @@ export default function UserPage() {
                 <TelegramIcon />
                 <YouTubeIcon />
               </Box>
-              <p className={"user-desc"}>{"No description"}</p>
+              <p className={"user-desc"}>{authMember?.memberDesc ? authMember?.memberDesc : "No description"}</p>
             </Box>
           </Stack>
         </Stack>
