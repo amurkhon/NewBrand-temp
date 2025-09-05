@@ -255,7 +255,7 @@ export default function Products(props: ProductsProps) {
                                         </Button>
                                     </CardOverflow>
                                 </Card> :
-                                <RentalCard price={product?.productPrice} category={product?.productDesc} image={imagePath} title={product?.productName} />
+                                <RentalCard product={product} onAdd={onAdd} price={product?.productPrice} category={product?.productDesc} image={imagePath} title={product?.productName} />
                             );
                         })) : <Box className="no-data">New Product Are Not Available!</Box>}
                     </CssVarsProvider>

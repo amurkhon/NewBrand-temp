@@ -14,18 +14,23 @@ import FmdGoodRoundedIcon from '@mui/icons-material/FmdGoodRounded';
 import KingBedRoundedIcon from '@mui/icons-material/KingBedRounded';
 import WifiRoundedIcon from '@mui/icons-material/WifiRounded';
 import Star from '@mui/icons-material/Star';
+import { Button } from '@mui/joy';
+import { CartItem } from '../../../lib/types/search';
+import { Product } from '../../../lib/types/product';
 
 type RentalCardProps = {
+  product: Product;
   category: React.ReactNode;
   image: string;
   liked?: boolean;
   rareFind?: boolean;
   title: React.ReactNode;
   price: number;
+  onAdd: (item: CartItem) => void;
 };
 
 export default function RentalCard(props: RentalCardProps) {
-  const { category, title, rareFind = false, liked = false, image, price } = props;
+  const { category, title, rareFind = false, liked = false, image, price, onAdd, product } = props;
   const [isLiked, setIsLiked] = React.useState(liked);
   return (
     <Card
@@ -155,7 +160,26 @@ export default function RentalCard(props: RentalCardProps) {
             4.0
           </Typography>
           <Typography level="title-lg" sx={{ flexGrow: 1, textAlign: 'right' }}>
-            <strong>${price}</strong> <Typography level="body-md">total</Typography>
+            <strong>${price}</strong> 
+            <Typography level="body-md">
+              <Button 
+                variant='outlined' 
+                color='success' 
+                style={{marginLeft: "10px"}}
+                onClick={(e) => {
+                    onAdd({
+                        _id: product._id,
+                        quantity: 1,
+                        name: product.productName,
+                        price: product.productPrice,
+                        image: product.productImages[0],
+                    })
+                    e.stopPropagation();
+                }}
+              >
+                Add to card
+              </Button>
+            </Typography>
           </Typography>
         </Stack>
       </CardContent>
