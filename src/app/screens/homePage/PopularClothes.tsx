@@ -7,12 +7,13 @@ import CardContent from '@mui/joy/CardContent';
 import Typography from '@mui/joy/Typography';
 import VisiblityIcon from "@mui/icons-material/Visibility"
 import CardOverflow from '@mui/joy/CardOverflow';
-import { DescriptionOutlined } from "@mui/icons-material";
 import { createSelector } from "reselect";
 import { retrievePopularProducts } from "./selector";
 import { useSelector } from "react-redux";
 import { Product } from "../../../lib/types/product";
 import { serverApi } from "../../../lib/config";
+import { useState } from "react";
+import { T } from "../../../lib/types/common";
 
 /** REDUX SELECTOR **/ 
 const popularProductsRetriever = createSelector(retrievePopularProducts,
@@ -20,6 +21,7 @@ const popularProductsRetriever = createSelector(retrievePopularProducts,
 );
 export default function PopularClothes() {
     const {popularProducts} = useSelector(popularProductsRetriever);
+    const [hoveredId, setHoveredId] = useState<string | null>(null);
     return <div className="popular-dishes-frame">
         <Container>
             <Stack className="popular-section">
@@ -27,32 +29,40 @@ export default function PopularClothes() {
                 <Stack className="cards-frame">
                     { popularProducts?.length !== 0 ? (
                     popularProducts?.map(function (product: Product, index){
-                        const imagePath = `${serverApi}/${product?.productImages[0]}`
+                        const imagePath = product?.productImages[0] ? `${serverApi}/${product?.productImages[0]}` : "";
+                        const imagePath1 = product?.productImages[1] ? `${serverApi}/${product?.productImages[1]}` : imagePath;
+
+                        const isHovered = hoveredId === product?._id;
+                        const shownSrc = isHovered ? imagePath : imagePath1;
                         return (
                             <CssVarsProvider key={product?._id}>
-                                <Card className={`card${index}`}>
-                                    <CardCover>
-                                        <img  src={imagePath} alt=""/>
-                                    </CardCover>
+                                <Card 
+                                    className={`card${index}`}
+                                    onMouseEnter={(e: T) => setHoveredId(product?._id ?? null)} 
+                                    onMouseLeave={(e: T) => setHoveredId(null)}
+                                >
+                                        <CardCover>
+                                            <img  src={shownSrc} alt=""/>
+                                        </CardCover>
                                     <CardCover className={"card-cover"} />
                                     <CardContent sx={{ justifyContent: 'flex-end' }}>
                                         <Stack 
                                             flexDirection={"row"}
                                             justifyContent={"space-between"}
                                         >
-                                            <Typography level="h2" fontSize="lg" mb="1" textColor="#331f1fff">
+                                            <Typography level="h2" fontSize="lg" mb="1" textColor="#f0e5e5ff">
                                                 {product?.productName}
                                             </Typography>
                                             <Typography
                                                 sx={{
                                                     fontWeight: "md",
-                                                    color: "neutral.600",
+                                                    color: "neutral.300",
                                                     alignItems: "center",
                                                     display: "flex"
                                                 }}                                            
                                             >
                                                 {product?.productViews}
-                                                <VisiblityIcon sx={{fontSize: 25, marginLeft: "5px"}} />
+                                                <VisiblityIcon sx={{fontSize: 25, marginLeft: "5px", color: "neutral.300"}} />
                                             </Typography>
                                         </Stack>
                                     </CardContent>
@@ -67,8 +77,7 @@ export default function PopularClothes() {
                                         }}
                                     >
                                         <Typography
-                                            startDecorator={<DescriptionOutlined />}
-                                            textColor={"neutral.600"}
+                                            textColor={"neutral.300"}
                                         >
                                             {product?.productDesc}
                                         </Typography>
