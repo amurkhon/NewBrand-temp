@@ -137,7 +137,7 @@ export default function Basket(props: BasketProps) {
                     </div>
                     <img src={imagePath} className={"product-img"} />
                     <span className={"product-name"}>{item?.name}</span>
-                    <p className={"product-price"}>{item?.price} x {item?.quantity}</p>
+                    <p className={"productprice"}>{item?.price} x {item?.quantity}</p>
                     <Box sx={{ minWidth: 120 }}>
                       <div className="col-2">
                         <button className="remove" onClick={(e) => {
