@@ -2,8 +2,6 @@
     width: 100%;
     height: 773px;
     display: flex;
-    background: url("/public/img/banner.jpg");
-    background-size: cover;
     margin-bottom: 20px;
 }
 
@@ -14,78 +12,90 @@
 
 .home-navbar .navbar-container .navbar-block {
     width: 100%;
-    height: 100px;
-    background: url("/public/img/otherNavbar.jpg");
-    background-size: 100% 100%;
-    display: flex;
+    height: 95px;
     position: fixed;
-    z-index: 100;
-    opacity: 0.8;
-}
+    top: 0;
+    z-index: 1000;
 
-.home-navbar .navbar-container .navbar-block .menu {
-    height: 100px;
+    background:
+      linear-gradient(120deg, rgba(59,130,246,0.9), rgba(236,72,153,0.9)),
+      url("/public/img/otherNavbar.jpg");
+
+    background-size: cover;
+    background-position: center;
+
     display: flex;
-    flex-direction: row;
+    align-items: center;
+    backdrop-filter: blur(15px);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+    transition: 0.6s ease;
+}
+
+.home-navbar.scrolled .navbar-block {
+    background:
+      linear-gradient(120deg, rgba(15,23,42,0.95), rgba(2,6,23,0.95));
+}
+
+.home-navbar .navbar-container .menu {
+    width: 100%;
+    height: 95px;
+    display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px;
 }
 
-.home-navbar .navbar-container .menu .brand-logo {
-    width: 200px;
-    height: 100px;
+.brand-logo {
+    height: 120px;
+    filter: drop-shadow(0 0 12px rgba(255,255,255,0.7));
 }
 
-.home-navbar .navbar-container .menu .links {
-    flex-direction: row;
-    justify-content: space-between;
-    min-width: 700px;
-    align-items: center;
+.links {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 28px;
 }
 
-.home-navbar .navbar-container .menu .links .login-button {
-    background: #3776CC;
-    color: #f8f8ff;
-}
-
-.home-navbar .navbar-container .menu .user-avatar {
-    width: 50px;
-    height: 50px;
-    border-radius: 24px;
-}
-
-.home-navbar a {
+.hover-line a {
+    color: white;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    position: relative;
     text-decoration: none;
 }
 
-.home-navbar .hover-line a {
-    color: #0c0c3a;
-    z-index: 100;
-    color: #f8f8ff;
-}
-
-.home-navbar .underline {
-    display: block;
+.hover-line::after {
     content: "";
-    border-bottom: solid 2px #d7b686;
-}
-
-.home-navbar .hover-line:after {
     display: block;
-    content: "";
-    border-bottom: solid 2px #d7b686;
+    height: 3px;
+    background: linear-gradient(90deg, #FACC15, #EC4899);
     transform: scaleX(0);
-    transition: transform 250ms ease-in-out;
+    transform-origin: left;
+    transition: 0.4s;
 }
 
-.home-navbar .hover-line:hover:after {
+.hover-line:hover::after {
     transform: scaleX(1);
 }
 
-.home-navber div.hover-line:after {
-    transform-origin: 0% 50%;
+.login-button {
+    background: linear-gradient(45deg, #FACC15, #EC4899);
+    color: black !important;
+    font-weight: 800 !important;
+    border-radius: 40px !important;
+    padding: 10px 28px !important;
+    box-shadow: 0 0 30px rgba(250,204,21,0.8);
 }
+
+.user-avatar {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    border: 3px solid #FACC15;
+    box-shadow: 0 0 15px rgba(250,204,21,0.9);
+}
+
 
 .home-navbar .navbar-container .header-frame {
     margin-top: 100px;
@@ -163,78 +173,99 @@
 
 .other-navbar {
     width: 100%;
-    height: 100px;
+    height: 95px;
+    position: fixed;
+    top: 0;
+    z-index: 1000;
+
+    background:
+      linear-gradient(120deg, rgba(59,130,246,0.9), rgba(236,72,153,0.9)),
+      url("/public/img/otherNavbar.jpg");
+
+    background-size: cover;
+    background-position: center;
+
     display: flex;
-    background: url("/public/img/otherNavbar.jpg");
-    background-size: 100% 100%;
-    opacity: 0.8;
+    align-items: center;
+    backdrop-filter: blur(14px);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.35);
 }
 
+/* container */
 .other-navbar .navbar-container {
-    margin-top: 20px;
+    width: 100%;
 }
 
+/* menu */
 .other-navbar .navbar-container .menu {
-    height: 50px;
+    height: 95px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
 }
 
-.other-navbar .navbar-container .menu .brand-logo {
-    width: 125px;
-    height: 100px;
+/* logo */
+.other-navbar .brand-logo {
+    height: 120px;
+    filter: drop-shadow(0 0 10px rgba(255,255,255,0.7));
 }
 
-.other-navbar .navbar-container .menu .links {
-    flex-direction: row;
-    justify-content: space-between;
-    min-width: 700px;
-    align-items: center;
+/* links row */
+.other-navbar .links {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 28px;
 }
 
-.other-navbar .navbar-container .menu .links .login-button {
-    background: #3776CC;
-    color: #f8f8ff;
-}
-
-.other-navbar .navbar-container .menu .user-avatar {
-    width: 50px;
-    height: 50px;
-    border-radius: 24px;
-}
-
-.other-navbar a {
-    text-decoration: none;
-}
-
+/* links */
 .other-navbar .hover-line a {
-    color: #f8f8ff;
-    z-index: 100;
+    color: white;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    position: relative;
 }
 
-.other-navbar .underline {
-    display: block;
+/* underline */
+.other-navbar .hover-line::after {
     content: "";
-    border-bottom: solid 2px #d7b686;
-}
-
-.other-navbar .hover-line:after {
     display: block;
-    content: "";
-    border-bottom: solid 2px #d7b686;
+    height: 3px;
+    background: linear-gradient(90deg, #FACC15, #EC4899);
     transform: scaleX(0);
-    transition: transform 250ms ease-in-out;
+    transform-origin: left;
+    transition: 0.4s;
 }
 
-.other-navbar .hover-line:hover:after {
+.other-navbar .hover-line:hover::after {
     transform: scaleX(1);
 }
 
-.other-navber div.hover-line:after {
-    transform-origin: 0% 50%;
+.other-navbar .underline::after {
+    transform: scaleX(1);
 }
+
+/* login */
+.other-navbar .login-button {
+    background: linear-gradient(45deg, #FACC15, #EC4899);
+    color: black !important;
+    font-weight: 800 !important;
+    border-radius: 40px !important;
+    padding: 10px 28px !important;
+    box-shadow: 0 0 25px rgba(250,204,21,0.8);
+}
+
+/* avatar */
+.other-navbar .user-avatar {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    border: 3px solid #FACC15;
+    box-shadow: 0 0 15px rgba(250,204,21,0.9);
+}
+
 
 
 /* BASKET */

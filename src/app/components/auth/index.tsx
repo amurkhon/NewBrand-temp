@@ -224,7 +224,6 @@ export default function AuthenticationModal(props: AuthenticationModalProps) {
                                     </form>
                                 </Box>
                             </Stack>
-                            <img src="/img/auth.webp" />
                         </Stack>
                     </Modal>
 
@@ -259,7 +258,6 @@ export default function AuthenticationModal(props: AuthenticationModalProps) {
                                     </form>
                                 </Box>
                             </Stack>
-                            <img src="/img/auth.webp" />
                         </Stack>
                     </Modal>
                 </React.Fragment>
